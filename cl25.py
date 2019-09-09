@@ -187,7 +187,7 @@ def graph_cl25(dataset, save_path):
     model_cl25.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
     train_data, test_data = spliting(dataset, 6000)
     flag = 0
-    for epoch in range(1):
+    for epoch in range(20000):
         for train_data_batch in input(dataset=train_data, batch_size=500):
             loss_train, _= model_cl25.train_on_batch(x=[train_data_batch[:, :4], train_data_batch[:, 4:-25]], y=train_data_batch[:, -25:])
             if epoch % 100 == 0 and flag == 0:
@@ -201,13 +201,13 @@ def graph_cl25(dataset, save_path):
     model_cl25.save(filepath=save_path)
 
 if __name__ == '__main__':
-    path = '/home/xiaosong/桌面/oldenburg_cl25.pickle' #改
-    save_path = '/home/xiaosong/桌面/graph_cl.h5' #改
+    path = '/home/xiaosong/桌面/oldenburg_cl25.pickle'
+    save_path = '/home/xiaosong/桌面/graph_cl_re_old/graph_cl.h5'
     dataset = LoadFile(p=path)
     graph_cl25(dataset=dataset, save_path=save_path)
     # 测试导入模型
     dataset = onehot(dataset, 25)
     model = tf.keras.models.load_model(save_path)
-    train_data, test_data = spliting(dataset, 6000)
+    train_data, test_data = spliting(dataset, 6600)
     _, acc = model.evaluate(x=[test_data[:, :4], test_data[:, 4:-25]], y=test_data[:, -25:], verbose=0)
     print('测试集准确率为: %s' % acc)

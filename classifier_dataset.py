@@ -153,5 +153,5 @@ if __name__ == '__main__':
     dataset = np.hstack((dataset_4feature, dataset_fft, label))
     dataset_guiyi = guiyi(dataset)
     print(dataset_guiyi.shape)
-    # SaveFile(data=dataset_guiyi, savepickle_p='/home/xiaosong/桌面/oldenburg_cl25.pickle')
+    SaveFile(data=dataset_guiyi, savepickle_p='/home/xiaosong/桌面/oldenburg_cl25.pickle')
     print(np.max(dataset_guiyi, axis=0))

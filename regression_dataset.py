@@ -36,7 +36,7 @@ def dataset_regression_guiyi(dataset, space, number):
         dataset_sub_pd['r'] = (dataset_r - dataset_r_sub[:, 0]) / (dataset_r_sub[:, 1] - dataset_r_sub[:, 0])
         dataset_sub_pd.drop(['r_sub'], axis=1, inplace=True)
         dataset_sub = dataset_sub_pd.values
-        # print(dataset_sub.shape)
+        print(dataset_sub.shape)
         if dataset_sub.shape[0] > number:
             dataset_return = dataset_sub[:number, :] if dataset_return.any() == 0 else \
                 np.vstack((dataset_return, dataset_sub[:number, :]))
