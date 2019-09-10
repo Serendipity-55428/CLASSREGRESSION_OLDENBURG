@@ -88,7 +88,7 @@ def graph_re(dataset, save_path):
             # acc3 = acc_regression(Threshold=0.1, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
             # print('T1=%s, acc1=%s  T2=%s, acc2=%s, T3=%s, acc3=%s' % (0.3, acc1, 0.2, acc2, 0.1, acc3))
             print('T1=%s, acc1=%s' % (0.5, acc1))
-            if acc1 > 0.98: break
+            if acc1 > 0.99: break
         flag = 0
     r_regression.save(save_path)
 
