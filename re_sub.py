@@ -72,9 +72,9 @@ def graph_re(dataset, save_path):
     r_regression = R_regression()
     optimizer = tf.keras.optimizers.SGD(lr=1e-2)
     r_regression.compile(optimizer=optimizer, loss=tf.keras.losses.mean_squared_error)
-    train_data, test_data = spliting(dataset, 6000)
+    train_data, test_data = spliting(dataset, 6600)
     flag = 0
-    for  epoch in range(1):
+    for  epoch in range(20000):
         for train_data_batch in input(dataset=train_data, batch_size=500):
             loss_train = r_regression.train_on_batch(x=[train_data_batch[:, :4], train_data_batch[:, 4:-1]],
                                                         y=train_data_batch[:, -1])
@@ -83,21 +83,23 @@ def graph_re(dataset, save_path):
                 flag = 1
         if epoch % 100 == 0:
             r_predict = r_regression.predict(x=[test_data[:, :4], test_data[:, 4:-1]], verbose=0)
-            acc1 = acc_regression(Threshold=0.3, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
-            acc2 = acc_regression(Threshold=0.2, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
-            acc3 = acc_regression(Threshold=0.1, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
-            print('T1=%s, acc1=%s  T2=%s, acc2=%s, T3=%s, acc3=%s' % (0.3, acc1, 0.2, acc2, 0.1, acc3))
+            acc1 = acc_regression(Threshold=0.5, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
+            # acc2 = acc_regression(Threshold=0.2, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
+            # acc3 = acc_regression(Threshold=0.1, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
+            # print('T1=%s, acc1=%s  T2=%s, acc2=%s, T3=%s, acc3=%s' % (0.3, acc1, 0.2, acc2, 0.1, acc3))
+            print('T1=%s, acc1=%s' % (0.5, acc1))
+            if acc1 > 0.98: break
         flag = 0
     r_regression.save(save_path)
 
 if __name__ == '__main__':
     path = '/home/xiaosong/桌面/oldenburg_regression_sub.pickle'
-    save_path = '/home/xiaosong/桌面/graph_re.h5'
+    save_path = '/home/xiaosong/桌面/graph_cl_re_old/graph_re.h5'
     dataset = LoadFile(p=path)
     graph_re(dataset=dataset, save_path=save_path)
     #测试模型
     model = tf.keras.models.load_model(save_path)
-    train_data, test_data = spliting(dataset, 6000)
+    train_data, test_data = spliting(dataset, 6600)
     r_predict = model.predict(x=[test_data[:, :4], test_data[:, 4:-1]], verbose=0)
-    acc = acc_regression(Threshold=0.1, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
+    acc = acc_regression(Threshold=0.5, y_true=test_data[:, -1][:, np.newaxis], y_pred=r_predict)
     print('测试集准确率为: %s' % acc)

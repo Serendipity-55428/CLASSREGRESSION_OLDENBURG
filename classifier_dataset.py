@@ -93,7 +93,7 @@ def dataset_junheng(dataset, number):
     '''
     dataset_pd = pd.DataFrame(data=dataset, columns=[str(i) for i in range(25)])
     dataset_return = np.array([0])
-    for i in range(25):
+    for i in range(20):
         sub_dataset = dataset_pd.loc[dataset_pd['24'] == i]
         if sub_dataset.values.shape[0] > number:
             dataset_return = sub_dataset.values[:number, :] if dataset_return.any() == 0 else \
@@ -135,15 +135,15 @@ def fft_transformer(dataset, N):
 
 
 if __name__ == '__main__':
-    space = classifier_25(26)
+    space = classifier_25(21)
     # print(space)
     p = '/home/xiaosong/oldenburg相关数据/data_oldenburg/OLDENBURG_all.pickle'
     dataset = LoadFile(p)
     # print(dataset.shape)
-    # print(Counter(dataset[:, -1]))
+    print(Counter(dataset[:, -1]))
     dataset_cl25 = dataset_cl(dataset=dataset, space=space)
     print(dataset_cl25.shape)
-    # checkclassifier(dataset_cl25[:, -1])
+    checkclassifier(dataset_cl25[:, -1])
     dataset_cl25_2000 = dataset_junheng(dataset=dataset_cl25, number=2000)
     checkclassifier(dataset_cl25_2000[:, -1])
     print(dataset_cl25_2000.shape)
@@ -153,5 +153,5 @@ if __name__ == '__main__':
     dataset = np.hstack((dataset_4feature, dataset_fft, label))
     dataset_guiyi = guiyi(dataset)
     print(dataset_guiyi.shape)
-    SaveFile(data=dataset_guiyi, savepickle_p='/home/xiaosong/桌面/oldenburg_cl25.pickle')
+    SaveFile(data=dataset_guiyi, savepickle_p='/home/xiaosong/桌面/oldenburg_cl20.pickle')
     print(np.max(dataset_guiyi, axis=0))

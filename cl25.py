@@ -118,12 +118,14 @@ def Cl25():
         def concat(inputs):
             return tf.concat(values=inputs, axis=1)
         layer4 = tf.keras.layers.Lambda(concat)(inputs=[flat, input1])
-        layer5 = tf.keras.layers.Dense(units=100, activation=tf.nn.relu, use_bias=True,
+        layer5 = tf.keras.layers.Dense(units=200, activation=tf.nn.relu, use_bias=True,
                                       kernel_initializer=tf.keras.initializers.TruncatedNormal(),
                                       bias_initializer=tf.keras.initializers.TruncatedNormal(), name='x_fc1')(layer4)
-        layer6 = tf.keras.layers.Dense(units=200, activation=tf.nn.relu, use_bias=True,
+        layer5 = tf.keras.layers.Dropout(rate=0.2, name='dropout1')(layer5)
+        layer6 = tf.keras.layers.Dense(units=300, activation=tf.nn.relu, use_bias=True,
                                       kernel_initializer=tf.keras.initializers.TruncatedNormal(),
                                       bias_initializer=tf.keras.initializers.TruncatedNormal(), name='x_fc2')(layer5)
+        layer6 = tf.keras.layers.Dropout(rate=0.2, name='dropout2')(layer6)
         layer7 = tf.keras.layers.Dense(units=25, activation=tf.nn.softmax, use_bias=True,
                                        kernel_initializer=tf.keras.initializers.TruncatedNormal(),
                                        bias_initializer=tf.keras.initializers.TruncatedNormal(), name='output')(layer6)
@@ -185,7 +187,7 @@ def graph_cl25(dataset, save_path):
     model_cl25 = Cl25()
     optimizer = tf.keras.optimizers.SGD(lr=1e-2)
     model_cl25.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
-    train_data, test_data = spliting(dataset, 6000)
+    train_data, test_data = spliting(dataset, 6600)
     flag = 0
     for epoch in range(20000):
         for train_data_batch in input(dataset=train_data, batch_size=500):
